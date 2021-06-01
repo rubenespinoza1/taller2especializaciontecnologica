@@ -3,13 +3,21 @@
     <div id="nav">
       <router-link to="/" replace>imagen</router-link> |
       <router-link to="/peliculas/populares" replace>Populares</router-link> |
-      <router-link to="/peliculas/top-rated" replace>Mejor Puntuadas</router-link>
+      <router-link to="/peliculas/top-rated" replace
+        >Mejor Puntuadas</router-link
+      >
     </div>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
+<script>
+
+</script>
+
+
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

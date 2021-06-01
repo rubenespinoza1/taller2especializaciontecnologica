@@ -1,14 +1,27 @@
 <template>
   <div id="peliculas">
-    <h1>Aca estan las peliculas Mejor Puntuadas</h1>
-    <ol>
-      <li v-for="pelicula in peliculas" :key="pelicula.id">
-        <button @click="seeMovie(pelicula.id)">{{ pelicula.title }}</button>
-      </li>
-    </ol>
+    <div class="container">
+      <div v-for="pelicula in peliculas" :key="pelicula.id" class="movie-row">
+        <div>
+          <input
+            type="image"
+            :src="pelicula.poster_path"
+            :alt="pelicula.title"
+            class="movie-card"
+            @click="seeMovie(pelicula.id)"
+          />
+          <div>
+            <label class="label-title">{{ pelicula.title }}</label>
+          </div>
+        </div>
+      </div>
 
-    <div id="botones-navegacion">
-      <button @click="seeMore">Pagina Siguiente</button>
+      <div id="botones-navegacion">
+        <button @click="seeMore" type="button" class="btn btn-primary">
+          Ver Mas
+          <span class="badge">+</span>
+        </button>
+      </div>
     </div>
     <router-view></router-view>
   </div>
@@ -16,7 +29,7 @@
 
 <script>
 import ApiService from "@/services/api.service.js";
-import Movie from '@/models/Movie'
+import Movie from "@/models/Movie";
 
 export default {
   data() {
@@ -37,25 +50,51 @@ export default {
           //console.log(new Movie(data.results[i]))
         }
       });
-      
     },
     seeMore() {
-      let response_data = ApiService.getNowPlaying(++this.current_page);
+      let response_data = ApiService.getTopRated(++this.current_page);
       response_data.then(({ data }) => {
         //console.log(data.results)
         for (let i = 0; i < 20; i++) {
           this.peliculas.push(new Movie(data.results[i]));
         }
       });
-      console.log(this.peliculas)
     },
-    seeMovie(id){
-      this.$router.push({path: `/peliculas/${id}`})
-    }
-    
+    seeMovie(id) {
+      this.$router.push({ path: `/peliculas/${id}` });
+    },
   },
 };
 </script>
 
 <style>
+#botones-navegacion {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  align-content: center;
+}
+
+.label-title{
+  text-shadow: 0.5px 0.5px black;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+  width: 100%;
+  height: 10vh;
+}
+
+.movie-row {
+  text-align: center;
+  background: white;
+}
+.movie-card {
+  text-align: center;
+  max-width: 200px;
+  max-height: 200px;
+  border: #000000;
+  border-radius: 2rem;
+}
 </style>

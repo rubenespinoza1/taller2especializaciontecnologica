@@ -1,14 +1,27 @@
 <template>
   <div id="peliculas">
-    <h1>Proximas Peliculas</h1>
-    <ol>
-      <li v-for="pelicula in peliculas" :key="pelicula.id">
-        <button @click="seeMovie(pelicula.id)">{{ pelicula.title }}</button>
-      </li>
-    </ol>
+    <div class="container">
+      <div v-for="pelicula in peliculas" :key="pelicula.id" class="movie-row">
+        <div>
+          <input
+            type="image"
+            :src="pelicula.poster_path"
+            :alt="pelicula.title"
+            class="movie-card"
+            @click="seeMovie(pelicula.id)"
+          />
+          <div>
+            <label class="label-title">{{ pelicula.title }}</label>
+          </div>
+        </div>
+      </div>
 
-    <div id="botones-navegacion">
-      <button @click="seeMore">Pagina Siguiente</button>
+      <div id="botones-navegacion">
+        <button @click="seeMore" type="button" class="btn btn-primary">
+          Ver mas
+          <span class="badge">+</span>
+        </button>
+      </div>
     </div>
     <router-view></router-view>
   </div>
@@ -33,7 +46,7 @@ export default {
       let response_data = ApiService.getNowPlaying(this.current_page);
       response_data.then(({ data }) => {
         for (let i = 0; i < 20; i++) {
-          this.peliculas.push(new Movie(data.results[i]))
+          this.peliculas.push(new Movie(data.results[i]));
           //console.log(new Movie(data.results[i]))
         }
       });
@@ -42,32 +55,43 @@ export default {
       let response_data = ApiService.getNowPlaying(++this.current_page);
       response_data.then(({ data }) => {
         for (let i = 0; i < 20; i++) {
-          this.peliculas.push(new Movie(data.results[i]))
+          this.peliculas.push(new Movie(data.results[i]));
           //console.log(new Movie(data.results[i]))
         }
       });
-      console.log(this.peliculas)
     },
-    seeMovie(id){
-      this.$router.push({path: `/peliculas/${id}`})
-    }
+    seeMovie(id) {
+      this.$router.push({ path: `/peliculas/${id}` });
+    },
   },
 };
 </script>
 
 <style>
-.grid-container {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196f3;
-  padding: 10px;
+#botones-navegacion {
+  align-content: center;
 }
 
-.grid-item {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 30px;
+.label-title{
+  text-shadow: 0.5px 0.5px black;
+}
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 5px;
+  width: 100%;
+  height: 10vh;
+}
+.movie-row {
   text-align: center;
+  background: white;
+}
+.movie-card {
+  text-align: center;
+  max-width: 200px;
+  max-height: 200px;
+  border: red;
+  border-radius: 2rem;
 }
 </style>
